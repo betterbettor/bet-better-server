@@ -1,32 +1,33 @@
-import express, { type Application } from 'express'
-import dotenv from 'dotenv'
-import bodyParser from 'body-parser'
+import express, { type Application } from 'express';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 // import { parseErrorResponse } from './utils/response'
-import baseRouter from './routes/base'
-import matchRouter from './routes/match'
-import expressJSDocSwagger from 'express-jsdoc-swagger'
-import mongoose from 'mongoose'
+import baseRouter from './routes/base';
+import matchRouter from './routes/match';
+import expressJSDocSwagger from 'express-jsdoc-swagger';
+import mongoose from 'mongoose';
 
-const app: Application = express()
+const app: Application = express();
 
-dotenv.config()
-
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/?retryWrites=true&w=majority`
+dotenv.config();
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/?retryWrites=true&w=majority`;
 
 try {
-  void mongoose.connect(uri)
-  console.log('Database connected ..')
+  void mongoose.connect(uri);
+  mongoose.connection.once('open', () => {
+    console.log('Database connected ..');
+  });
 } catch (err) {
-  console.log('Database error ..', err)
+  console.log('Database error ..', err);
 }
 
 const options = {
   info: {
     version: '1.0.0',
-    title: 'Albums store',
+    title: 'BetBetter',
     license: {
-      name: 'MIT'
-    }
+      name: 'MIT',
+    },
   },
   security: {
     // BasicAuth: {
@@ -42,21 +43,21 @@ const options = {
   apiDocsPath: '/v3/api-docs',
   notRequiredAsNullable: false,
   swaggerUiOptions: {},
-  multiple: true
-}
+  multiple: true,
+};
 
-expressJSDocSwagger(app)(options)
+expressJSDocSwagger(app)(options);
 
-const PORT = process.env.PORT ?? 8000
+const PORT = process.env.PORT ?? 8000;
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(baseRouter)
-app.use(matchRouter)
+app.use(baseRouter);
+app.use(matchRouter);
 
 // app.use(parseErrorResponse)
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`)
-})
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
