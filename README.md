@@ -1,4 +1,5 @@
 # bet-better-server
+
 RESTful API for BetBetter
 
 ## Installation
@@ -6,17 +7,21 @@ RESTful API for BetBetter
 Install bet-better-server with yarn
 
 ```bash
-  yarn install 
+  yarn install
   yarn build
   yarn start
 ```
 
+Run bet-better-server in dev mode
 
-    
+```bash
+  yarn dev
+```
+
 ## Documentation
+
 List API Document with Swagger
 [API Doc ](http://localhost:${PORT}/api-docs)
-
 
 ## Environment Variables
 
@@ -27,4 +32,3 @@ To run this project, you will need to add the following environment variables to
 `DB_USERNAME`
 
 `DB_PASSWORD`
-
