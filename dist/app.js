@@ -17,7 +17,9 @@ dotenv_1.default.config();
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/?retryWrites=true&w=majority`;
 try {
     void mongoose_1.default.connect(uri);
-    console.log('Database connected ..');
+    mongoose_1.default.connection.once('open', () => {
+        console.log('Database connected ..');
+    });
 }
 catch (err) {
     console.log('Database error ..', err);
@@ -25,10 +27,10 @@ catch (err) {
 const options = {
     info: {
         version: '1.0.0',
-        title: 'Albums store',
+        title: 'BetBetter',
         license: {
-            name: 'MIT'
-        }
+            name: 'MIT',
+        },
     },
     security: {
     // BasicAuth: {
@@ -44,7 +46,7 @@ const options = {
     apiDocsPath: '/v3/api-docs',
     notRequiredAsNullable: false,
     swaggerUiOptions: {},
-    multiple: true
+    multiple: true,
 };
 (0, express_jsdoc_swagger_1.default)(app)(options);
 const PORT = (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8000;
