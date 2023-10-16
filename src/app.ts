@@ -7,6 +7,7 @@ import matchRouter from './routes/match';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import mongoose from 'mongoose';
 
+// file deepcode ignore UseCsurfForExpress: application do not require any authentication
 const app: Application = express();
 app.use(helmet());
 
