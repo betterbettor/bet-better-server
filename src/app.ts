@@ -1,4 +1,4 @@
-import express, { type Application } from 'express';
+import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 // import { parseErrorResponse } from './utils/response'

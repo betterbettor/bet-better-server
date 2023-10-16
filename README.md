@@ -2,6 +2,8 @@
 
 RESTful API for BetBetter
 
+API Endpoint: `https://bet-better-server.onrender.com/`
+
 ## Installation
 
 Install bet-better-server with yarn
@@ -21,13 +23,11 @@ Run bet-better-server in dev mode
 ## Documentation
 
 List API Document with Swagger
-[API Doc ](http://localhost:${PORT}/api-docs)
+[API Doc](https://bet-better-server.onrender.com/api-docs/)
 
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
-
-`PORT`
 
 `DB_USERNAME`
 
