@@ -16,7 +16,7 @@
     "dev": "concurrently \"npx tsc -w\" \"nodemon -w\"",
     "build": "npx tsc",
     "start": "node dist/app.js",
-    "eslint": "npx eslint 'src/**'"
+    "eslint": "npx eslint \"src/**/*.{ts,js}\""
   },
   "dependencies": {
     "dotenv": "^16.3.1",
