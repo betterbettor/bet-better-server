@@ -1,7 +1,6 @@
 import express, { type Application } from 'express';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
-import bodyParser from 'body-parser';
 // import { parseErrorResponse } from './utils/response'
 import baseRouter from './routes/base';
 import matchRouter from './routes/match';
@@ -51,9 +50,6 @@ const options = {
 expressJSDocSwagger(app)(options);
 
 const PORT = process.env.PORT ?? 8000;
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(baseRouter);
 app.use(matchRouter);
