@@ -9,11 +9,6 @@
     "sourceType": "module"
   },
   "rules": {
-    "semi": "off",
-    "@typescript-eslint/semi": "off",
-    "no-tabs": "off",
-    "@typescript-eslint/indent": "off",
-    "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "no-type-imports" }]
   }
 }
