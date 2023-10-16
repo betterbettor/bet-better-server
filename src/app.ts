@@ -1,5 +1,6 @@
 import express, { type Application } from 'express';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
 import bodyParser from 'body-parser';
 // import { parseErrorResponse } from './utils/response'
 import baseRouter from './routes/base';
@@ -8,6 +9,7 @@ import expressJSDocSwagger from 'express-jsdoc-swagger';
 import mongoose from 'mongoose';
 
 const app: Application = express();
+app.use(helmet());
 
 dotenv.config();
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/?retryWrites=true&w=majority`;
