@@ -1,8 +1,8 @@
-import express, { type Request, type Response } from 'express'
-import { type ResponseData, parseResponse } from '../utils/response'
-import { MatchModel } from "../models/match";
+import express, { Request, Response } from 'express';
+import { ResponseData, parseResponse } from '../utils/response';
+import { MatchModel } from '../models/match';
 
-const router = express.Router()
+const router = express.Router();
 
 /**
  * GET /matches
@@ -13,8 +13,8 @@ const router = express.Router()
  * @return {ResponseData<array<MatchModel>>} 200 - success response - application/json
  */
 router.get('/matches', (req: Request, res: Response) => {
-  const response: ResponseData<MatchModel[]> = parseResponse('success', [])
-  res.send(response)
-})
+  const response: ResponseData<MatchModel[]> = parseResponse('success', []);
+  res.send(response);
+});
 
-export default router
+export default router;

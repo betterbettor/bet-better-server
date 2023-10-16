@@ -1,12 +1,12 @@
-import express, { type NextFunction, type Request, type Response } from 'express'
-import { parseResponse } from '../utils/response'
-const router = express.Router()
+import express, { NextFunction, Request, Response } from 'express';
+import { parseResponse } from '../utils/response';
+const router = express.Router();
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send({
-    time: Date.now()
-  })
-})
+    time: Date.now(),
+  });
+});
 
 /**
  * GET /connect
@@ -16,8 +16,8 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
  * @return {ResponseData} 200 - success response - application/json
  */
 router.get('/connect', (req: Request, res: Response) => {
-  const response = parseResponse('success', null)
-  res.send(response)
-})
+  const response = parseResponse('success', null);
+  res.send(response);
+});
 
-export default router
+export default router;
