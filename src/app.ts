@@ -12,7 +12,7 @@ const app: Application = express();
 app.use(helmet());
 
 dotenv.config();
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/betterBettor?retryWrites=true&w=majority`;
 
 try {
   void mongoose.connect(uri);

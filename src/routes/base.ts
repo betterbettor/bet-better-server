@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { parseResponse } from '../utils/response';
+import { ResponseData } from '../interfaces/response.interface';
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
@@ -9,15 +9,15 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 /**
- * GET /connect
+ * GET /health-check
  * @summary This is used for check server connection
  * @typedef ResponseData
- * @tags connect
+ * @tags health-check
  * @return {ResponseData} 200 - success response - application/json
  */
-router.get('/connect', (req: Request, res: Response) => {
-  const response = parseResponse('success', null);
-  res.send(response);
+router.get('/health-check', (req: Request, res: Response) => {
+  const responseData: ResponseData = { code: 200 };
+  res.json(responseData);
 });
 
 export default router;
