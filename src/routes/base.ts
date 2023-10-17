@@ -9,22 +9,15 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 /**
- * GET /connect
+ * GET /health-check
  * @summary This is used for check server connection
  * @typedef ResponseData
- * @tags connect
+ * @tags health-check
  * @return {ResponseData} 200 - success response - application/json
  */
-router.get('/healthcheck', (req: Request, res: Response) => {
-  if (req.statusCode === undefined) {
-    res.json({
-      code: 500,
-    });
-  } else {
-    res.json({
-      code: req.statusCode ?? 200,
-    });
-  }
+router.get('/health-check', (req: Request, res: Response) => {
+  const responseData: ResponseData = { code: 200 };
+  res.json(responseData);
 });
 
 export default router;

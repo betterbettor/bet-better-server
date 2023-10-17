@@ -1,24 +1,13 @@
+import League from './league.interface';
+import { OddsValues } from './odds.interface';
+import Team from './team.interface';
+
 interface Match {
   id: number;
   startTime: number;
-  league: {
-    id: number;
-    name: string;
-    logo: string;
-    flag: string;
-  };
-  home: {
-    id: number;
-    name: string;
-    code: string;
-    logo: string;
-  };
-  away: {
-    id: number;
-    name: string;
-    code: string;
-    logo: string;
-  };
+  league: League;
+  home: Team;
+  away: Team;
   ttl: number;
   lastUpdated: number;
 }
@@ -26,9 +15,7 @@ interface Match {
 export interface MatchResponse extends Match {
   bookMakerId?: number;
   bookMakerName?: string;
-  homeOdds: number[];
-  awayOdds: number[];
-  drawOdds: number[];
+  odds: OddsValues[];
 }
 
 export default Match;

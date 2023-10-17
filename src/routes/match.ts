@@ -1,7 +1,5 @@
 import express, { RequestHandler } from 'express';
 import MatchListController from '../controllers/matchController';
-import { MatchResponse } from '../interfaces/match.interface';
-import ResponseData from '../interfaces/response.interface';
 
 const router = express.Router();
 
