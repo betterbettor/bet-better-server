@@ -3,6 +3,7 @@ import MatchService from '../services/matchService';
 import MatchResponseData from '../interfaces/response.interface';
 import OddsService from '../services/oddsService';
 import Match, { MatchResponse } from '../interfaces/match.interface';
+import Odds from '../interfaces/odds.interface';
 
 const getMatchList = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -27,16 +28,16 @@ const _processMatch = async (m: Match): Promise<MatchResponse> => {
     odds: [],
   };
 
-  const odds = await OddsService.getOddsByMatchId(m.id);
+  const odds: Odds[] = await OddsService.getOddsByMatchId(m.id);
 
-  odds.forEach((o, i) => {
+  odds.forEach((o: Odds, i) => {
     if (i === 0) {
       match.bookMakerId = o.bookMakerId;
       match.bookMakerName = o.bookMakerName;
     }
 
-    const { home, away, draw } = o;
-    match.odds.push({ home, away, draw });
+    const { home, away, draw, timestamp } = o;
+    match.odds.push({ home, away, draw, timestamp });
   });
   return match;
 };
