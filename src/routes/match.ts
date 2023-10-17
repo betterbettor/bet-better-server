@@ -1,6 +1,7 @@
-import express, { Request, Response } from 'express';
-import { ResponseData, parseResponse } from '../utils/response';
-import { MatchModel } from '../models/match';
+import express from 'express';
+import MatchListController from '../controllers/matchController';
+import { MatchResponse } from '../interfaces/match.interface';
+import ResponseData from '../interfaces/response.interface';
 
 const router = express.Router();
 
@@ -12,9 +13,6 @@ const router = express.Router();
  * @tags match
  * @return {ResponseData<array<MatchModel>>} 200 - success response - application/json
  */
-router.get('/matches', (req: Request, res: Response) => {
-  const response: ResponseData<MatchModel[]> = parseResponse('success', []);
-  res.send(response);
-});
+router.get('/matches', MatchListController.getMatchList);
 
 export default router;
