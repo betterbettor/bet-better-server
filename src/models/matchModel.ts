@@ -1,6 +1,13 @@
 import mongoose, { Schema } from 'mongoose';
 import Match from '../interfaces/match.interface';
 
+const teamSchema = {
+  id: Number,
+  name: String,
+  code: String,
+  logo: String,
+};
+
 const matchSchema = new Schema({
   id: Number,
   startTime: Number,
@@ -10,18 +17,8 @@ const matchSchema = new Schema({
     logo: String,
     flag: String,
   },
-  home: {
-    id: Number,
-    name: String,
-    code: String,
-    logo: String,
-  },
-  away: {
-    id: Number,
-    name: String,
-    code: String,
-    logo: String,
-  },
+  home: teamSchema,
+  away: teamSchema,
   ttl: Number,
   lastUpdated: Number,
 });

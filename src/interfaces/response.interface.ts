@@ -1,8 +1,11 @@
 import { MatchResponse } from './match.interface';
 
-interface ResponseData {
+export interface ResponseData {
   code: number;
+}
+
+interface MatchResponseData extends ResponseData {
   matches: MatchResponse[];
 }
 
-export default ResponseData;
+export default MatchResponseData;

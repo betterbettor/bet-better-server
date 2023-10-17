@@ -16,15 +16,9 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
  * @return {ResponseData} 200 - success response - application/json
  */
 router.get('/healthcheck', (req: Request, res: Response) => {
-  if (req.statusCode === undefined) {
-    res.json({
-      code: 500,
-    });
-  } else {
-    res.json({
-      code: req.statusCode ?? 200,
-    });
-  }
+  const code = req.statusCode ?? 500;
+  const responseData: ResponseData = { code };
+  res.json(responseData);
 });
 
 export default router;

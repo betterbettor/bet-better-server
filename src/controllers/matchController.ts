@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import MatchService from '../services/matchService';
-import ResponseData from '../interfaces/response.interface';
+import MatchResponseData from '../interfaces/response.interface';
 import OddsService from '../services/oddsService';
 import Match, { MatchResponse } from '../interfaces/match.interface';
 
@@ -8,13 +8,13 @@ const getMatchList = async (req: Request, res: Response): Promise<void> => {
   try {
     const matches = await MatchService.getMatchList();
     const matchResponse = await Promise.all(matches.map(_processMatch));
-    const response = _buildResponse(matchResponse);
+    const response = _buildMatchResponse(200, matchResponse);
     res.json(response);
   } catch (error: any) {
     if (error === undefined) {
-      res.status(400).json({ error: 'Bad Request' });
+      res.status(400).json(_buildMatchResponse(400));
     } else {
-      res.status(error.status ?? 500).json({ code: error.status ?? 500, matches: [] });
+      res.status(error.status ?? 500).json(_buildMatchResponse(error.status ?? 500));
     }
   }
 };
@@ -24,9 +24,7 @@ const _processMatch = async (m: Match): Promise<MatchResponse> => {
     ...m,
     bookMakerId: 0,
     bookMakerName: '',
-    homeOdds: [],
-    awayOdds: [],
-    drawOdds: [],
+    odds: [],
   };
 
   const odds = await OddsService.getOddsByMatchId(m.id);
@@ -36,16 +34,16 @@ const _processMatch = async (m: Match): Promise<MatchResponse> => {
       match.bookMakerId = o.bookMakerId;
       match.bookMakerName = o.bookMakerName;
     }
-    match.homeOdds.push(o.home);
-    match.awayOdds.push(o.away);
-    match.drawOdds.push(o.draw);
+
+    const { home, away, draw } = o;
+    match.odds.push({ home, away, draw });
   });
   return match;
 };
 
-const _buildResponse = (matchResponse: MatchResponse[]): ResponseData => {
+const _buildMatchResponse = (statusCode: number, matchResponse: MatchResponse[] = []): MatchResponseData => {
   return {
-    code: 200,
+    code: statusCode,
     matches: matchResponse,
   };
 };

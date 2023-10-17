@@ -4,4 +4,5 @@ import MatchSchema from '../models/matchModel';
 const getMatchList = async (): Promise<Match[]> => {
   return await MatchSchema.find({}).lean();
 };
+
 export default { getMatchList };

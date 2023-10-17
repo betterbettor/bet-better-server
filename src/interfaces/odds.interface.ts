@@ -1,11 +1,14 @@
-interface Odds {
+export interface OddsValues {
+  home: number;
+  away: number;
+  draw: number;
+}
+
+interface Odds extends OddsValues {
   matchId: number;
   bookMakerId: number;
   bookMakerName: string;
   timestamp: number;
-  home: number;
-  away: number;
-  draw: number;
 }
 
 export default Odds;
