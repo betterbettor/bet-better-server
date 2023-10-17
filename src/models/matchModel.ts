@@ -1,22 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
 import Match from '../interfaces/match.interface';
-
-const teamSchema = {
-  id: Number,
-  name: String,
-  code: String,
-  logo: String,
-};
+import { teamSchema } from './teamModel';
+import { leagueSchema } from './leagueModel';
 
 const matchSchema = new Schema({
   id: Number,
   startTime: Number,
-  league: {
-    id: Number,
-    name: String,
-    logo: String,
-    flag: String,
-  },
+  league: leagueSchema,
   home: teamSchema,
   away: teamSchema,
   ttl: Number,
