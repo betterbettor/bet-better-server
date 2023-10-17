@@ -1,15 +1,11 @@
+import League from './league.interface';
 import { OddsValues } from './odds.interface';
 import Team from './team.interface';
 
 interface Match {
   id: number;
   startTime: number;
-  league: {
-    id: number;
-    name: string;
-    logo: string;
-    flag: string;
-  };
+  league: League;
   home: Team;
   away: Team;
   ttl: number;
