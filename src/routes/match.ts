@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import MatchListController from '../controllers/matchController';
 import { MatchResponse } from '../interfaces/match.interface';
 import ResponseData from '../interfaces/response.interface';
@@ -13,6 +13,6 @@ const router = express.Router();
  * @tags match
  * @return {ResponseData<array<MatchModel>>} 200 - success response - application/json
  */
-router.get('/matches', MatchListController.getMatchList);
+router.get('/matches', MatchListController.getMatchList as RequestHandler);
 
 export default router;
