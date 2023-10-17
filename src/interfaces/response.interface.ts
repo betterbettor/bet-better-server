@@ -1,8 +1,8 @@
-import { MatchResponse } from "./match.interface";
+import { MatchResponse } from './match.interface';
 
 interface ResponseData {
-  code: number
-  matches: MatchResponse[]
+  code: number;
+  matches: MatchResponse[];
 }
 
 export default ResponseData;

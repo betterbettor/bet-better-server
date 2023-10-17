@@ -8,7 +8,7 @@ const oddsSchema = new Schema({
   timestamp: Number,
   home: Number,
   away: Number,
-  draw: Number
+  draw: Number,
 });
 
 const OddsSchema = mongoose.model<Odds>('Odds', oddsSchema);

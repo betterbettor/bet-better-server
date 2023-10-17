@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import Match from "../interfaces/match.interface";
+import mongoose, { Schema } from 'mongoose';
+import Match from '../interfaces/match.interface';
 
 const matchSchema = new Schema({
   id: Number,
@@ -8,25 +8,24 @@ const matchSchema = new Schema({
     id: Number,
     name: String,
     logo: String,
-    flag: String
+    flag: String,
   },
   home: {
     id: Number,
     name: String,
     code: String,
-    logo: String
+    logo: String,
   },
   away: {
     id: Number,
     name: String,
     code: String,
-    logo: String
+    logo: String,
   },
   ttl: Number,
-  lastUpdated: Number
+  lastUpdated: Number,
 });
 
 const MatchSchema = mongoose.model<Match>('Match', matchSchema);
-
 
 export default MatchSchema;
