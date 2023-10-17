@@ -1,13 +1,15 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
+import helmet from 'helmet';
 // import { parseErrorResponse } from './utils/response'
 import baseRouter from './routes/base';
 import matchRouter from './routes/match';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import mongoose from 'mongoose';
 
+// file deepcode ignore UseCsurfForExpress: application do not require any authentication
 const app: Application = express();
+app.use(helmet());
 
 dotenv.config();
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/?retryWrites=true&w=majority`;
@@ -49,9 +51,6 @@ const options = {
 expressJSDocSwagger(app)(options);
 
 const PORT = process.env.PORT ?? 8000;
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(baseRouter);
 app.use(matchRouter);
