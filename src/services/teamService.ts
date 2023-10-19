@@ -1,6 +1,10 @@
 import Team from '../interfaces/team.interface';
 import TeamSchema from '../models/teamModel';
 
+const getTeamById = async (id: number): Promise<Team | null> => {
+  return await TeamSchema.where({ id }).findOne();
+};
+
 const upsertTeams = async (teams: Team[]): Promise<boolean> => {
   try {
     await TeamSchema.updateMany(teams, { upsert: true });
@@ -10,4 +14,4 @@ const upsertTeams = async (teams: Team[]): Promise<boolean> => {
   }
 };
 
-export default { upsertTeams };
+export default { getTeamById, upsertTeams };
