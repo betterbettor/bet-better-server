@@ -1,4 +1,5 @@
 import express, { Application } from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 // import { parseErrorResponse } from './utils/response'
@@ -9,6 +10,14 @@ import mongoose from 'mongoose';
 
 // file deepcode ignore UseCsurfForExpress: application do not require any authentication
 const app: Application = express();
+
+const allowedOrigins = ['http://localhost:3000', 'https://bet-better-react.netlify.app'];
+const corsOptions: cors.CorsOptions = {
+  origin: allowedOrigins,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(helmet());
 
 dotenv.config();
