@@ -5,4 +5,13 @@ const getOddsByMatchId = async (matchId: number): Promise<Odds[]> => {
   return await OddSchema.find({ matchId }).sort({ timestamp: 'asc' }).exec();
 };
 
-export default { getOddsByMatchId };
+const createOdds = async (odds: Odds[]): Promise<boolean> => {
+  try {
+    await OddSchema.create(odds);
+    return true;
+  } catch (ex) {
+    return false;
+  }
+};
+
+export default { getOddsByMatchId, createOdds };
