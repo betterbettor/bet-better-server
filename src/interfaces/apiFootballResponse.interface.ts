@@ -45,7 +45,7 @@ interface Fixture {
 }
 
 interface BetValue {
-  value: string;
+  value: 'Home' | 'Away' | 'Draw';
   odd: string;
 }
 
