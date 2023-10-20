@@ -5,13 +5,13 @@ const getMatchList = async (): Promise<Match[]> => {
   return await MatchSchema.find({}).lean();
 };
 
-const upsertMatches = async (matches: Match[]): Promise<boolean> => {
+const createMatches = async (matches: Match[]): Promise<boolean> => {
   try {
-    await MatchSchema.updateMany(matches, { upsert: true });
+    await MatchSchema.create(matches);
     return true;
   } catch (ex) {
     return false;
   }
 };
 
-export default { getMatchList, upsertMatches };
+export default { getMatchList, createMatches };
