@@ -28,6 +28,7 @@ try {
   void mongoose.connect(uri);
   mongoose.connection.once('open', () => {
     console.log('Database connected ..');
+    oddsJob.start();
   });
 } catch (err) {
   console.log('Database error ..', err);
@@ -69,5 +70,4 @@ app.use(matchRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-  oddsJob.start();
 });
