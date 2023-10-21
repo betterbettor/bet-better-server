@@ -89,4 +89,4 @@ const _extractMatchesFromResponse = (res: FixturesResponse): Match[] => {
   });
 };
 
-export const oddsJob = new CronJob('* * */3 * * *', fetchOdds);
+export const oddsJob = new CronJob('0 0 */3 * * *', fetchOdds, null, false);
