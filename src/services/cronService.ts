@@ -54,15 +54,15 @@ const _extractNewMatchIds = async (res: OddsResponse): Promise<number[]> => {
 };
 
 const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
-  return res.response.reduce((odds: Odds[], matchRespnose) => {
-    const { bookmakers, fixture } = matchRespnose;
+  return res.response.reduce((odds: Odds[], matchResponse) => {
+    const { bookmakers, fixture } = matchResponse;
     const curOdds = bookmakers.map((bookmaker) => {
       const values = bookmaker.bets[0].values;
       return {
         home: parseFloat(values.find(({ value }) => value === 'Home')?.odd ?? ''),
         away: parseFloat(values.find(({ value }) => value === 'Away')?.odd ?? ''),
         draw: parseFloat(values.find(({ value }) => value === 'Draw')?.odd ?? ''),
-        timestamp: new Date(matchRespnose.update).getTime(),
+        timestamp: new Date(matchResponse.update).getTime(),
         matchId: fixture.id,
         bookMakerId: bookmaker.id,
         bookMakerName: bookmaker.name,
