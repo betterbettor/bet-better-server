@@ -74,6 +74,7 @@ const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
 
 const _extractMatchesFromResponse = (res: FixturesResponse): Match[] => {
   const now = Date.now();
+  const twentyFourHoursInMilliseconds = 24 * 3600 * 1000;
   return res.response.map(({ fixture, league, teams }) => {
     const startTime = fixture.timestamp * 1000;
     return {
@@ -82,7 +83,7 @@ const _extractMatchesFromResponse = (res: FixturesResponse): Match[] => {
       league,
       home: teams.home,
       away: teams.away,
-      ttl: startTime + 24 * 3600 * 1000,
+      ttl: startTime + twentyFourHoursInMilliseconds,
       lastUpdated: now,
     };
   });
