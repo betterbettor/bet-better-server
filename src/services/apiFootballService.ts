@@ -5,7 +5,7 @@ import {
   OddsResponse,
   TeamsResponse,
 } from '../interfaces/apiFootballResponse.interface';
-import { BET, BOOK_MAKER } from '../config/config';
+import { BET_ID, BOOK_MAKER_ID } from '../config/config';
 
 const _callApi = async <T>(path: string, params?: Record<string, unknown>): Promise<T | null> => {
   const option: AxiosRequestConfig = {
@@ -34,7 +34,7 @@ const getLeagueById = async (leagueId: number): Promise<LeaguesResponse | null> 
   const params = {
     id: leagueId,
     current: 'true',
-    bet: BET,
+    bet: BET_ID,
   };
   const res = await _callApi<LeaguesResponse>(path, params);
   return res;
@@ -63,8 +63,8 @@ const getOddsByLeague = async (leagueId: number, season: number): Promise<OddsRe
   const params = {
     league: leagueId,
     season,
-    bet: BET,
-    bookmaker: BOOK_MAKER,
+    bet: BET_ID,
+    bookmaker: BOOK_MAKER_ID,
   };
   const res = await _callApi<OddsResponse>(path, params);
   return res;

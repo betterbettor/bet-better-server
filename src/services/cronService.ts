@@ -18,16 +18,16 @@ const fetchOdds = async (): Promise<void> => {
   const odds = _extractOddsFromResponse(oddsResponse);
   if (odds.length === 0) return;
 
-  const [createOddsResult, newMatchIds] = await Promise.all([
+  const [hasCreatedOdds, newMatchIds] = await Promise.all([
     oddsService.createOdds(odds),
     _extractNewMatchIds(oddsResponse),
   ]);
-  console.log({ createOddsResult });
+  console.log({ hasCreatedOdds });
 
   if (newMatchIds.length > 0) {
     const newMatches = await fetchMatches(newMatchIds);
-    const createMatchesResult = await MatchService.createMatches(newMatches);
-    console.log({ createMatchesResult });
+    const hasCreatedMatches = await MatchService.createMatches(newMatches);
+    console.log({ hasCreatedMatches });
   }
 
   await Promise.all(odds.map(_updateMatchTimestamp));
