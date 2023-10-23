@@ -7,6 +7,8 @@ import { FixturesResponse, OddsResponse } from '../interfaces/apiFootballRespons
 import Match from '../interfaces/match.interface';
 import { LEAGUE_ID } from '../config/config';
 
+const twentyFourHoursInMilliseconds = 24 * 3600 * 1000;
+
 const fetchOdds = async (): Promise<void> => {
   console.log('fetching odds', new Date().toLocaleTimeString());
   const leagueId = LEAGUE_ID;
@@ -56,6 +58,7 @@ const _extractNewMatchIds = async (res: OddsResponse): Promise<number[]> => {
 const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
   return res.response.reduce((odds: Odds[], matchResponse) => {
     const { bookmakers, fixture } = matchResponse;
+    const startTime = fixture.timestamp * 1000;
     const curOdds = bookmakers.map((bookmaker) => {
       const values = bookmaker.bets[0].values;
       return {
@@ -66,6 +69,7 @@ const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
         matchId: fixture.id,
         bookMakerId: bookmaker.id,
         bookMakerName: bookmaker.name,
+        ttl: startTime + twentyFourHoursInMilliseconds,
       };
     });
     return odds.concat(curOdds);
@@ -74,7 +78,6 @@ const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
 
 const _extractMatchesFromResponse = (res: FixturesResponse): Match[] => {
   const now = Date.now();
-  const twentyFourHoursInMilliseconds = 24 * 3600 * 1000;
   return res.response.map(({ fixture, league, teams }) => {
     const startTime = fixture.timestamp * 1000;
     return {
