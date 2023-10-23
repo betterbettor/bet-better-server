@@ -42,7 +42,6 @@
  * @property {League} league - The league to which the match belongs.
  * @property {Team} home - The home team.
  * @property {Team} away - The away team.
- * @property {number} ttl - Time-to-live (TTL) value.
  * @property {number} lastUpdated - The timestamp of the last update.
  */
 
