@@ -7,6 +7,7 @@ import baseRouter from './routes/base';
 import matchRouter from './routes/match';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import mongoose from 'mongoose';
+import { oddsJob } from './services/cronService';
 
 // file deepcode ignore UseCsurfForExpress: application do not require any authentication
 const app: Application = express();
@@ -27,6 +28,7 @@ try {
   void mongoose.connect(uri);
   mongoose.connection.once('open', () => {
     console.log('Database connected ..');
+    oddsJob.start();
   });
 } catch (err) {
   console.log('Database error ..', err);

@@ -4,7 +4,6 @@ import Team from '../interfaces/team.interface';
 export const teamSchema = new Schema({
   id: Number,
   name: String,
-  code: String,
   logo: String,
 });
 

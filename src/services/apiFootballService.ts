@@ -5,6 +5,7 @@ import {
   OddsResponse,
   TeamsResponse,
 } from '../interfaces/apiFootballResponse.interface';
+import { BET_ID, BOOK_MAKER_ID } from '../config/config';
 
 const _callApi = async <T>(path: string, params?: Record<string, unknown>): Promise<T | null> => {
   const option: AxiosRequestConfig = {
@@ -33,7 +34,7 @@ const getLeagueById = async (leagueId: number): Promise<LeaguesResponse | null> 
   const params = {
     id: leagueId,
     current: 'true',
-    bet: 1,
+    bet: BET_ID,
   };
   const res = await _callApi<LeaguesResponse>(path, params);
   return res;
@@ -48,12 +49,10 @@ const getTeamInfo = async (teamId: number): Promise<TeamsResponse | null> => {
   return res?.results === 0 ? null : res;
 };
 
-const getFixturesByLeague = async (leagueId: number, season: number): Promise<FixturesResponse | null> => {
+const getFixturesByIds = async (fixtureIds: number[]): Promise<FixturesResponse | null> => {
   const path = '/v3/fixtures';
   const params = {
-    league: leagueId,
-    season,
-    status: 'NS',
+    ids: fixtureIds.join('-'),
   };
   const res = await _callApi<FixturesResponse>(path, params);
   return res;
@@ -64,10 +63,11 @@ const getOddsByLeague = async (leagueId: number, season: number): Promise<OddsRe
   const params = {
     league: leagueId,
     season,
-    bet: 1,
+    bet: BET_ID,
+    bookmaker: BOOK_MAKER_ID,
   };
   const res = await _callApi<OddsResponse>(path, params);
   return res;
 };
 
-export default { getFixturesByLeague, getLeagueById, getOddsByLeague, getTeamInfo };
+export default { getFixturesByIds, getLeagueById, getOddsByLeague, getTeamInfo };

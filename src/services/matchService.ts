@@ -5,13 +5,22 @@ const getMatchList = async (): Promise<Match[]> => {
   return await MatchSchema.find({}, '-_id -__v -ttl -league._id -home._id -away._id').lean();
 };
 
-const upsertMatches = async (matches: Match[]): Promise<boolean> => {
+const createMatches = async (matches: Match[]): Promise<boolean> => {
   try {
-    await MatchSchema.updateMany(matches, { upsert: true });
+    await MatchSchema.create(matches);
     return true;
   } catch (ex) {
     return false;
   }
 };
 
-export default { getMatchList, upsertMatches };
+const updateTimestamp = async (matchId: number, lastUpdated: number): Promise<boolean> => {
+  try {
+    await MatchSchema.updateOne({ id: matchId }, { lastUpdated });
+    return true;
+  } catch (ex) {
+    return false;
+  }
+};
+
+export default { getMatchList, createMatches, updateTimestamp };
