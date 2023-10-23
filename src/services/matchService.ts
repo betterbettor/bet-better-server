@@ -2,7 +2,7 @@ import Match from '../interfaces/match.interface';
 import MatchSchema from '../models/matchModel';
 
 const getMatchList = async (): Promise<Match[]> => {
-  return await MatchSchema.find({}).lean();
+  return await MatchSchema.find({}, '-_id -__v -ttl -league._id -home._id -away._id').lean();
 };
 
 const upsertMatches = async (matches: Match[]): Promise<boolean> => {
