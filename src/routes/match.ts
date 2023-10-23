@@ -102,7 +102,7 @@ const router = express.Router();
  * @example response - 400 - failure response example
  * {
  *   "code": 400,
- *   "matches": [],
+ *   "matches": []
  * }
  */
 router.get('/matches', MatchListController.getMatchList as RequestHandler);
