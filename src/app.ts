@@ -32,7 +32,7 @@ try {
     oddsJob.start();
   });
 } catch (err: any) {
-  logger.info(`Database error .. ${err}`);
+  logger.error(`Database error .. ${err}`);
 }
 
 const options = {
