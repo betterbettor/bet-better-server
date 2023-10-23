@@ -6,9 +6,11 @@ import Odds from '../interfaces/odds.interface';
 import { FixturesResponse, OddsResponse } from '../interfaces/apiFootballResponse.interface';
 import Match from '../interfaces/match.interface';
 import { LEAGUE_ID } from '../config/config';
+import logger from '../utils/logger';
 
 const fetchOdds = async (): Promise<void> => {
-  console.log('fetching odds', new Date().toLocaleTimeString());
+  logger.info(`fetch odds start`);
+
   const leagueId = LEAGUE_ID;
   const season = 2023; // TODO::retrieve from DB
 
@@ -22,12 +24,13 @@ const fetchOdds = async (): Promise<void> => {
     oddsService.createOdds(odds),
     _extractNewMatchIds(oddsResponse),
   ]);
-  console.log({ hasCreatedOdds });
+
+  logger.info(`fetch odds: odds creates = ${hasCreatedOdds}`);
 
   if (newMatchIds.length > 0) {
     const newMatches = await fetchMatches(newMatchIds);
     const hasCreatedMatches = await MatchService.createMatches(newMatches);
-    console.log({ hasCreatedMatches });
+    logger.info(`fetch matches: matches creates = ${hasCreatedMatches}`);
   }
 
   await Promise.all(odds.map(_updateMatchTimestamp));
