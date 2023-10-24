@@ -4,13 +4,22 @@ import { teamSchema } from './teamModel';
 import { leagueSchema } from './leagueModel';
 
 const matchSchema = new Schema({
-  id: Number,
+  id: {
+    type: Number,
+    index: true,
+    unique: true,
+  },
   startTime: Number,
   league: leagueSchema,
   home: teamSchema,
   away: teamSchema,
-  ttl: Number,
-  lastUpdated: Number,
+  ttl: {
+    type: Date,
+    index: {
+      expireAfterSeconds: 0,
+    },
+  },
+  lastUpdated: Date,
 });
 
 const MatchSchema = mongoose.model<Match>('Match', matchSchema);
