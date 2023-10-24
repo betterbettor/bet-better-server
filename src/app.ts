@@ -8,6 +8,7 @@ import matchRouter from './routes/match';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import mongoose from 'mongoose';
 import { oddsJob } from './services/cronService';
+import { loadApiKeys } from './config/config';
 import logger from './utils/logger';
 
 // file deepcode ignore UseCsurfForExpress: application do not require any authentication
@@ -23,6 +24,8 @@ app.use(cors(corsOptions));
 app.use(helmet());
 
 dotenv.config();
+loadApiKeys();
+
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/betterBettor?retryWrites=true&w=majority`;
 
 try {

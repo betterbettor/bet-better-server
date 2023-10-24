@@ -5,7 +5,7 @@ import {
   OddsResponse,
   TeamsResponse,
 } from '../interfaces/apiFootballResponse.interface';
-import { BET_ID, BOOK_MAKER_ID } from '../config/config';
+import { BET_ID, BOOK_MAKER_ID, getApiKey } from '../config/config';
 
 const _callApi = async <T>(path: string, params?: Record<string, unknown>): Promise<T | null> => {
   const option: AxiosRequestConfig = {
@@ -14,7 +14,7 @@ const _callApi = async <T>(path: string, params?: Record<string, unknown>): Prom
     url: path,
     timeout: 3000,
     headers: {
-      'X-RapidAPI-Key': process.env.API_KEY,
+      'X-RapidAPI-Key': getApiKey(),
       'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com',
     },
   };
