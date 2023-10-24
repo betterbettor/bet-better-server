@@ -10,6 +10,14 @@ import mongoose from 'mongoose';
 import { oddsJob } from './services/cronService';
 import { loadApiKeys } from './config/config';
 import logger from './utils/logger';
+import { checkEnvironment } from './utils/validator';
+dotenv.config();
+
+const envNames = ['DB_USERNAME', 'DB_PASSWORD', 'API_FOOTBALL_ENDPOINT', 'API_KEY'];
+if (!checkEnvironment(envNames)) {
+  logger.error(`${envNames.join(', ')} are required!`);
+  process.exit();
+}
 
 // file deepcode ignore UseCsurfForExpress: application do not require any authentication
 const app: Application = express();
@@ -23,7 +31,6 @@ const corsOptions: cors.CorsOptions = {
 app.use(cors(corsOptions));
 app.use(helmet());
 
-dotenv.config();
 loadApiKeys();
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0kgbqss.mongodb.net/betterBettor?retryWrites=true&w=majority`;
