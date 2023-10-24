@@ -36,8 +36,8 @@ const _processMatch = async (m: Match): Promise<MatchResponse> => {
       match.bookMakerName = o.bookMakerName;
     }
 
-    const { home, away, draw, timestamp } = o;
-    match.odds.push({ home, away, draw, timestamp });
+    const { home, away, draw, timestamp, ttl } = o;
+    match.odds.push({ home, away, draw, timestamp, ttl });
   });
   return match;
 };

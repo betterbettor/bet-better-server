@@ -6,9 +6,13 @@ import Odds from '../interfaces/odds.interface';
 import { FixturesResponse, OddsResponse } from '../interfaces/apiFootballResponse.interface';
 import Match from '../interfaces/match.interface';
 import { LEAGUE_ID } from '../config/config';
+import logger from '../utils/logger';
+
+const twentyFourHoursInMilliseconds = 24 * 3600 * 1000;
 
 const fetchOdds = async (): Promise<void> => {
-  console.log('fetching odds', new Date().toLocaleTimeString());
+  logger.info(`fetch odds start`);
+
   const leagueId = LEAGUE_ID;
   const season = 2023; // TODO::retrieve from DB
 
@@ -22,12 +26,13 @@ const fetchOdds = async (): Promise<void> => {
     oddsService.createOdds(odds),
     _extractNewMatchIds(oddsResponse),
   ]);
-  console.log({ hasCreatedOdds });
+
+  logger.info(`fetch odds: odds creates = ${hasCreatedOdds}`);
 
   if (newMatchIds.length > 0) {
     const newMatches = await fetchMatches(newMatchIds);
     const hasCreatedMatches = await MatchService.createMatches(newMatches);
-    console.log({ hasCreatedMatches });
+    logger.info(`fetch matches: matches creates = ${hasCreatedMatches}`);
   }
 
   await Promise.all(odds.map(_updateMatchTimestamp));
@@ -56,6 +61,7 @@ const _extractNewMatchIds = async (res: OddsResponse): Promise<number[]> => {
 const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
   return res.response.reduce((odds: Odds[], matchResponse) => {
     const { bookmakers, fixture } = matchResponse;
+    const startTime = fixture.timestamp * 1000;
     const curOdds = bookmakers.map((bookmaker) => {
       const values = bookmaker.bets[0].values;
       return {
@@ -66,6 +72,7 @@ const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
         matchId: fixture.id,
         bookMakerId: bookmaker.id,
         bookMakerName: bookmaker.name,
+        ttl: startTime + twentyFourHoursInMilliseconds,
       };
     });
     return odds.concat(curOdds);
@@ -74,7 +81,6 @@ const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
 
 const _extractMatchesFromResponse = (res: FixturesResponse): Match[] => {
   const now = Date.now();
-  const twentyFourHoursInMilliseconds = 24 * 3600 * 1000;
   return res.response.map(({ fixture, league, teams }) => {
     const startTime = fixture.timestamp * 1000;
     return {

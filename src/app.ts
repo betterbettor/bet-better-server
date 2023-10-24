@@ -9,6 +9,7 @@ import expressJSDocSwagger from 'express-jsdoc-swagger';
 import mongoose from 'mongoose';
 import { oddsJob } from './services/cronService';
 import { loadApiKeys } from './config/config';
+import logger from './utils/logger';
 
 // file deepcode ignore UseCsurfForExpress: application do not require any authentication
 const app: Application = express();
@@ -30,11 +31,11 @@ const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 try {
   void mongoose.connect(uri);
   mongoose.connection.once('open', () => {
-    console.log('Database connected ..');
+    logger.info('Database connected ..');
     oddsJob.start();
   });
-} catch (err) {
-  console.log('Database error ..', err);
+} catch (err: any) {
+  logger.error(`Database error .. ${err}`);
 }
 
 const options = {
@@ -72,5 +73,5 @@ app.use(matchRouter);
 // app.use(parseErrorResponse)
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  logger.info(`Server is running on http://localhost:${PORT}`);
 });
