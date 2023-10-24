@@ -9,6 +9,7 @@ import { LEAGUE_ID } from '../config/config';
 import logger from '../utils/logger';
 
 const twentyFourHoursInMilliseconds = 24 * 3600 * 1000;
+const sevenDaysInMilliseconds = 7 * twentyFourHoursInMilliseconds;
 
 const fetchOdds = async (): Promise<void> => {
   logger.info(`fetch odds start`);
@@ -72,7 +73,7 @@ const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
         matchId: fixture.id,
         bookMakerId: bookmaker.id,
         bookMakerName: bookmaker.name,
-        ttl: startTime + twentyFourHoursInMilliseconds,
+        ttl: startTime + sevenDaysInMilliseconds,
       };
     });
     return odds.concat(curOdds);
@@ -89,7 +90,7 @@ const _extractMatchesFromResponse = (res: FixturesResponse): Match[] => {
       league,
       home: teams.home,
       away: teams.away,
-      ttl: startTime + twentyFourHoursInMilliseconds,
+      ttl: startTime + sevenDaysInMilliseconds,
       lastUpdated: now,
     };
   });
