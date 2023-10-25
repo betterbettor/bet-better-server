@@ -9,7 +9,7 @@ const matchSchema = new Schema({
     index: true,
     unique: true,
   },
-  startTime: Number,
+  startTime: Date,
   league: leagueSchema,
   home: teamSchema,
   away: teamSchema,
