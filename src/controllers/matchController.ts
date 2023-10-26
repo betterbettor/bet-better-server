@@ -21,6 +21,7 @@ const getMatchList = async (req: Request, res: Response): Promise<void> => {
 };
 
 const _processMatch = async (m: Match): Promise<MatchResponse> => {
+  m.lastUpdated = m.lastUpdated.valueOf();
   const match: MatchResponse = {
     ...m,
     bookMakerId: 0,
@@ -29,16 +30,15 @@ const _processMatch = async (m: Match): Promise<MatchResponse> => {
   };
 
   const odds: Odds[] = await OddsService.getOddsByMatchId(m.id);
-
-  odds.forEach((o: Odds, i) => {
+  const newOdds = odds.map((o: Odds, i) => {
     if (i === 0) {
       match.bookMakerId = o.bookMakerId;
       match.bookMakerName = o.bookMakerName;
     }
-
-    const { home, away, draw, timestamp, ttl } = o;
-    match.odds.push({ home, away, draw, timestamp, ttl });
+    return { home: o.home, away: o.away, draw: o.draw, timestamp: o.timestamp.valueOf() };
   });
+
+  match.odds = newOdds;
   return match;
 };
 
