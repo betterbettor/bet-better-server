@@ -7,7 +7,7 @@ import baseRouter from './routes/base';
 import matchRouter from './routes/match';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import mongoose from 'mongoose';
-import { oddsJob } from './services/cronService';
+import { oddsJob, testJob } from './services/cronService';
 import { loadApiKeys } from './config/config';
 import logger from './utils/logger';
 import { checkEnvironment } from './utils/validator';
@@ -39,7 +39,8 @@ try {
   void mongoose.connect(uri);
   mongoose.connection.once('open', () => {
     logger.info('Database connected ..');
-    oddsJob.start();
+    // oddsJob.start();
+    testJob.start();
   });
 } catch (err: any) {
   logger.error(`Database error .. ${err}`);
