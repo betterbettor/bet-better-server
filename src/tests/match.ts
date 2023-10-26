@@ -24,7 +24,11 @@ describe('/matches api tests', () => {
       .request(base)
       .get('/matches')
       .end((_err, res) => {
+        // check success response status
         assert.equal(res.status, 200);
+
+        chai.expect(res.body.matches).to.be.a('array');
+
         if (res.body.matches.length === 0) {
           return;
         }
@@ -55,6 +59,8 @@ describe('/matches api tests', () => {
         chai.expect(away.id).to.be.a(typeof away.id);
         chai.expect(away.name).to.be.a(typeof away.name);
         chai.expect(away.logo).to.be.a(typeof away.logo);
+
+        chai.expect(match.odds).to.be.a('array');
 
         if (match.odds.length > 0) {
           const odds: OddsValues = match.odds[0];
