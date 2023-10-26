@@ -3,7 +3,7 @@ import ApiFootballService from './apiFootballService';
 import MatchService from './matchService';
 import oddsService from './oddsService';
 import Odds from '../interfaces/odds.interface';
-import { FixturesResponse, OddsResponse } from '../interfaces/apiFootballResponse.interface';
+import { FixturesResponse, MatchResponse } from '../interfaces/apiFootballResponse.interface';
 import Match from '../interfaces/match.interface';
 import { LEAGUE_ID } from '../config/config';
 import logger from '../utils/logger';
@@ -11,7 +11,7 @@ import logger from '../utils/logger';
 const twentyFourHoursInMilliseconds = 24 * 3600 * 1000;
 const sevenDaysInMilliseconds = 7 * twentyFourHoursInMilliseconds;
 
-const fetchOdds = async (): Promise<void> => {
+export const fetchOdds = async (): Promise<void> => {
   logger.info(`fetch odds start`);
 
   const leagueId = LEAGUE_ID;
@@ -19,13 +19,25 @@ const fetchOdds = async (): Promise<void> => {
 
   const oddsResponse = await ApiFootballService.getOddsByLeague(leagueId, season);
   if (oddsResponse === null) return;
+  const matchResponse = oddsResponse.response;
 
-  const odds = _extractOddsFromResponse(oddsResponse);
+  if (oddsResponse.paging.total > 1) {
+    const promises = new Array(oddsResponse.paging.total - 1)
+      .fill(0)
+      // eslint-disable-next-line @typescript-eslint/promise-function-async
+      .map((_, i) => ApiFootballService.getOddsByLeague(leagueId, season, i + 2));
+    const oddsResponses = await Promise.all(promises);
+    for (const res of oddsResponses) {
+      if (res === null) continue;
+      matchResponse.push(...res.response);
+    }
+  }
+  const odds = _extractOddsFromResponse(matchResponse);
   if (odds.length === 0) return;
 
   const [hasCreatedOdds, newMatchIds] = await Promise.all([
     oddsService.createOdds(odds),
-    _extractNewMatchIds(oddsResponse),
+    _extractNewMatchIds(matchResponse),
   ]);
 
   logger.info(`fetch odds: odds creates = ${hasCreatedOdds}`);
@@ -40,16 +52,24 @@ const fetchOdds = async (): Promise<void> => {
 };
 
 const fetchMatches = async (matchIds: number[]): Promise<Match[]> => {
-  const fixturesResponse = await ApiFootballService.getFixturesByIds(matchIds);
-  return fixturesResponse === null ? [] : _extractMatchesFromResponse(fixturesResponse);
+  const promises: Array<Promise<FixturesResponse | null>> = [];
+  const maxNumOfMatchesPerRequest = 10;
+  for (let i = 0; i < matchIds.length; i += maxNumOfMatchesPerRequest) {
+    promises.push(ApiFootballService.getFixturesByIds(matchIds.slice(i, i + maxNumOfMatchesPerRequest)));
+  }
+
+  const fixturesResponses = await Promise.all(promises);
+  return fixturesResponses
+    .map((fixturesResponse) => (fixturesResponse === null ? [] : _extractMatchesFromResponse(fixturesResponse)))
+    .flat();
 };
 
 const _updateMatchTimestamp = async (odds: Odds): Promise<boolean> => {
   return await MatchService.updateTimestamp(odds.matchId, odds.timestamp);
 };
 
-const _extractNewMatchIds = async (res: OddsResponse): Promise<number[]> => {
-  const matchIds = res.response.map((match) => match.fixture.id);
+const _extractNewMatchIds = async (res: MatchResponse[]): Promise<number[]> => {
+  const matchIds = res.map((match) => match.fixture.id);
   const storedMatches = await MatchService.getMatchList();
   const storedMatchesIds = storedMatches.map(({ id }) => id);
 
@@ -59,8 +79,8 @@ const _extractNewMatchIds = async (res: OddsResponse): Promise<number[]> => {
   }, []);
 };
 
-const _extractOddsFromResponse = (res: OddsResponse): Odds[] => {
-  return res.response.reduce((odds: Odds[], matchResponse) => {
+const _extractOddsFromResponse = (res: MatchResponse[]): Odds[] => {
+  return res.reduce((odds: Odds[], matchResponse) => {
     const { bookmakers, fixture } = matchResponse;
     const startTime = fixture.timestamp * 1000;
     const curOdds = bookmakers.map((bookmaker) => {

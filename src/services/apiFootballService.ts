@@ -58,13 +58,14 @@ const getFixturesByIds = async (fixtureIds: number[]): Promise<FixturesResponse 
   return res;
 };
 
-const getOddsByLeague = async (leagueId: number, season: number): Promise<OddsResponse | null> => {
+const getOddsByLeague = async (leagueId: number, season: number, page: number = 1): Promise<OddsResponse | null> => {
   const path = '/v3/odds';
   const params = {
     league: leagueId,
     season,
     bet: BET_ID,
     bookmaker: BOOK_MAKER_ID,
+    page,
   };
   const res = await _callApi<OddsResponse>(path, params);
   return res;
