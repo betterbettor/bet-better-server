@@ -20,6 +20,7 @@ export const fetchOdds = async (): Promise<void> => {
   const oddsResponse = await ApiFootballService.getOddsByLeague(leagueId, season);
   if (oddsResponse === null) return;
   const matchResponse = oddsResponse.response;
+  logger.info(`fetch odds in page ${oddsResponse.paging.current}/${oddsResponse.paging.total}`);
 
   if (oddsResponse.paging.total > 1) {
     const promises = new Array(oddsResponse.paging.total - 1)
@@ -30,6 +31,7 @@ export const fetchOdds = async (): Promise<void> => {
     for (const res of oddsResponses) {
       if (res === null) continue;
       matchResponse.push(...res.response);
+      logger.info(`fetch odds in page ${res.paging.current}/${res.paging.total}`);
     }
   }
   const odds = _extractOddsFromResponse(matchResponse);
@@ -40,12 +42,14 @@ export const fetchOdds = async (): Promise<void> => {
     _extractNewMatchIds(matchResponse),
   ]);
 
-  logger.info(`fetch odds: odds creates = ${hasCreatedOdds}`);
+  logger.info(
+    `fetch odds: odds creates = ${hasCreatedOdds} | new Match number = ${newMatchIds.length} | odds pages = ${oddsResponse.paging.total}`,
+  );
 
   if (newMatchIds.length > 0) {
     const newMatches = await fetchMatches(newMatchIds);
     const hasCreatedMatches = await MatchService.createMatches(newMatches);
-    logger.info(`fetch matches: matches creates = ${hasCreatedMatches}`);
+    logger.info(`fetch matches: matches creates = ${hasCreatedMatches} | number = ${newMatches.length}`);
   }
 
   await Promise.all(odds.map(_updateMatchTimestamp));
@@ -60,7 +64,15 @@ const fetchMatches = async (matchIds: number[]): Promise<Match[]> => {
 
   const fixturesResponses = await Promise.all(promises);
   return fixturesResponses
-    .map((fixturesResponse) => (fixturesResponse === null ? [] : _extractMatchesFromResponse(fixturesResponse)))
+    .map((fixturesResponse) => {
+      let matches: Match[] = [];
+      if (fixturesResponse !== null) {
+        matches = _extractMatchesFromResponse(fixturesResponse);
+        logger.info(`fetch matches: pages = ${fixturesResponse.paging.current}/${fixturesResponse.paging.total}`);
+      }
+      logger.info(`fetch matches: total = ${matches.length}`);
+      return matches;
+    })
     .flat();
 };
 

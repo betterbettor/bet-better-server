@@ -6,6 +6,7 @@ import {
   TeamsResponse,
 } from '../interfaces/apiFootballResponse.interface';
 import { BET_ID, BOOK_MAKER_ID, getApiKey } from '../config/config';
+import logger from '../utils/logger';
 
 const _callApi = async <T>(path: string, params?: Record<string, unknown>): Promise<T | null> => {
   const option: AxiosRequestConfig = {
@@ -24,7 +25,8 @@ const _callApi = async <T>(path: string, params?: Record<string, unknown>): Prom
   try {
     const res = await axios.request<T>(option);
     return res.data;
-  } catch (ex) {
+  } catch (ex: any) {
+    logger.error(`_callApi: path: ${path} | error: ${ex}`);
     return null;
   }
 };
