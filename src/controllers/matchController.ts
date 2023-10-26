@@ -21,7 +21,7 @@ const getMatchList = async (req: Request, res: Response): Promise<void> => {
 };
 
 const _processMatch = async (m: Match): Promise<MatchResponse> => {
-  m.lastUpdated = m.lastUpdated / 1000;
+  m.lastUpdated = m.lastUpdated.valueOf();
   const match: MatchResponse = {
     ...m,
     bookMakerId: 0,
@@ -35,7 +35,7 @@ const _processMatch = async (m: Match): Promise<MatchResponse> => {
       match.bookMakerId = o.bookMakerId;
       match.bookMakerName = o.bookMakerName;
     }
-    return { home: o.home, away: o.away, draw: o.draw, timestamp: o.timestamp / 1000 };
+    return { home: o.home, away: o.away, draw: o.draw, timestamp: o.timestamp.valueOf() };
   });
 
   match.odds = newOdds;
